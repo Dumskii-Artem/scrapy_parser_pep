@@ -9,7 +9,6 @@ class PepSpider(scrapy.Spider):
     allowed_domains = ['peps.python.org']
     start_urls = ['https://peps.python.org/']
 
-
     def parse(self, response):
         rows = response.css('section#index-by-category tbody tr')
         for row in rows:
@@ -28,27 +27,12 @@ class PepSpider(scrapy.Spider):
             r'PEP\s+\d+\s+–\s+(.*)')
 
         status = response.xpath(
-            '//dt[starts-with(normalize-space(), "Status")]/following-sibling::dd[1]//text()'
+            '//dt[starts-with(normalize-space(), "Status")]'
+            '/following-sibling::dd[1]//text()'
         ).get()
-        # status = response.xpath(
-        #     '//dt[contains(text(), "Status")]/following-sibling::dd[1]/text()'
-        # ).get()
 
         yield PepParseItem(
             number=number,
             name=name.strip() if name else '',
             status=status.strip() if status else '',
         )
-    #
-    # def parse_pep(self, response):
-    #     number = response.css('h1.page-title::text').re_first(r'PEP\s+(\d+)')
-    #     name = response.css('h1.page-title::text').re_first(r'PEP\s+\d+\s+–\s+(.*)')
-    #     status = response.xpath(
-    #         '//dt[normalize-space(text())="Status"]/following-sibling::dd[1]/text()'
-    #     ).get()
-    #
-    #     yield PepParseItem(
-    #         number=number,
-    #         name=name.strip() if name else '',
-    #         status=status.strip() if status else '',
-    #     )
