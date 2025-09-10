@@ -22,8 +22,9 @@ def test_run_scrapy(mock_dirs):
         'ITEM_PIPELINES': {
             'pep_parse.pipelines.PepParsePipeline': 300,
         },
+        # mock_base_dir / 'results/pep_%(time)s.csv': {
         'FEEDS': {
-            mock_base_dir / 'results/pep_%(time)s.csv': {
+                mock_base_dir / 'results/pep_%(time)s.csv': {
                 'format': 'csv',
                 'fields': ['number', 'name', 'status'],
             },
