@@ -17,6 +17,7 @@
 
 ```bash
 git clone https://github.com/Dumskii-Artem/scrapy_parser_pep.git
+cd scrapy_parser_pep
 python3 -m venv .venv
 source .venv/bin/activate        # Linux/macOS
 # или
