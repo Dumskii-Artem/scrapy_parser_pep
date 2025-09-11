@@ -18,7 +18,6 @@ class PepSpider(scrapy.Spider):
                 callback=self.parse_pep
             )
 
-
     def parse_pep(self, response):
         title = response.css('h1.page-title::text').get()
         number = title.re.search(r'PEP\s+(\d+)', title).group(1)

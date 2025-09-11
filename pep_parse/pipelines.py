@@ -26,6 +26,6 @@ class PepParsePipeline:
         with open(filename, mode='w', encoding='utf-8', newline='') as f:
             writer = csv.writer(f)
             rows = [['Статус', 'Количество']] + \
-                   sorted(self.status_counter.items()) + \
-                   [['Total', sum(self.status_counter.values())]]
+                sorted(self.status_counter.items()) + \
+                [['Total', sum(self.status_counter.values())]]
             writer.writerows(rows)
