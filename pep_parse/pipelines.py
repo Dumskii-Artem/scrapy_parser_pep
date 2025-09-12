@@ -8,9 +8,6 @@ from pep_parse.settings import RESULTS_DIR
 
 
 class PepParsePipeline:
-    def __init__(self):
-        self.results_dir: None
-
     def _resolve_results_dir(self, spider) -> Path:
         feeds = spider.settings.get("FEEDS") or {}
         try:
