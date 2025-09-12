@@ -2,16 +2,28 @@ import csv
 import os
 from datetime import datetime
 from collections import defaultdict
+from pathlib import Path
 
 from pep_parse.settings import RESULTS_DIR
 
 
 class PepParsePipeline:
+    def __init__(self):
+        self.results_dir: None
+
+    def _resolve_results_dir(self, spider) -> Path:
+        feeds = spider.settings.get("FEEDS") or {}
+        try:
+            first_key = next(iter(feeds))
+            return Path(str(first_key)).parent
+        except Exception:
+            return Path(spider.settings.get("RESULTS_DIR", RESULTS_DIR))
 
     @classmethod
     def from_crawler(cls, crawler):
         pipeline = cls()
-        os.makedirs(RESULTS_DIR, exist_ok=True)
+        pipeline.results_dir = pipeline._resolve_results_dir(crawler.spider)
+        os.makedirs(pipeline.results_dir, exist_ok=True)
         return pipeline
 
     def open_spider(self, spider):
@@ -23,7 +35,7 @@ class PepParsePipeline:
 
     def close_spider(self, spider):
         filename = os.path.join(
-            RESULTS_DIR,
+            self.results_dir,
             'status_summary_{}.csv'
             .format(datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
         )
