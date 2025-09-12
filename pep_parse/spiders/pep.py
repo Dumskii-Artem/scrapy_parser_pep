@@ -12,18 +12,17 @@ class PepSpider(scrapy.Spider):
 
     def parse(self, response):
         for href in response.css(
-                'section#index-by-category tbody '
-                'tr td:nth-child(3) a::attr(href)').getall():
+            'section#index-by-category tbody '
+            'tr td:nth-child(3) a::attr(href)'
+        ).getall():
             yield response.follow(href, callback=self.parse_pep)
 
     def parse_pep(self, response):
         title = response.css('h1.page-title::text').get()
-        number = re.search(r'PEP\s+(\d+)', title).group(1)
-        name = re.search(r'PEP\s+\d+\s+–\s+(.*)', title).group(1)
-        status = response.css('dt:contains("Status") + dd abbr::text').get()
-
         yield PepParseItem(
-            number=number,
-            name=name.strip(),
-            status=status.strip(),
+            number=re.search(r'PEP\s+(\d+)', title).group(1),
+            name=re.search(r'PEP\s+\d+\s+–\s+(.*)', title).group(1).strip(),
+            status=response.css(
+                'dt:contains("Status") + dd abbr::text'
+            ).get().strip(),
         )

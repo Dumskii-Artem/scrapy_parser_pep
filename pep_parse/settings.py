@@ -1,3 +1,5 @@
+from pathlib import Path
+
 LOG_LEVEL = 'ERROR'
 BOT_NAME = 'pep_parse'
 
@@ -6,6 +8,7 @@ SPIDER_MODULES = [NEWSPIDER_MODULE]
 
 ROBOTSTXT_OBEY = True
 
+BASE_DIR = Path(__file__).parent.parent
 RESULTS_DIR = 'results'
 FEEDS = {
     f'{RESULTS_DIR}/pep_%(time)s.csv': {
